@@ -19,7 +19,7 @@ from typing import Optional, List
 
 app = FastAPI()
 security = HTTPBearer()
-env_bearer_token = 'ACCESS_TOKEN'
+env_bearer_token = 'sk-xxxx'
 
 class QADocs(BaseModel):
     query: Optional[str]
