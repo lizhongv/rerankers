@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-@Time: 2023/11/7 22:45
+@Time: 2025/8/12 22:45
 @Author: zhidong
 @File: reranker.py
 @Desc:
@@ -19,7 +19,7 @@ from typing import Optional, List
 
 app = FastAPI()
 security = HTTPBearer()
-env_bearer_token = 'ACCESS_TOKEN'
+env_bearer_token = 'sk-xxxx'
 
 class QADocs(BaseModel):
     query: Optional[str]

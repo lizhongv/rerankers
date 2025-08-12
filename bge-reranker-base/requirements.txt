@@ -1,7 +1,33 @@
+# # transformers==4.44.2
+# flagembedding==1.2.8
+# # accelerate==0.18.0
+# uvicorn==0.24.0
+# fastapi==0.104.1
+
+# # transformers==4.45.0 
+# flagembedding==1.3.2
+# fastapi
+# pydantic
+# uvicorn
+# # itsdangerous
+# protobuf
+
+# numpy==2.3.2
+# pydantic==2.11.7
+# uvicorn==0.35.0
+
+# torch==2.1.0 
 fastapi==0.104.1
-transformers[sentencepiece]
+uvicorn==0.24.0 
+transformers==4.33.0
+sentence-transformers==2.5.1
 FlagEmbedding==1.2.8
-pydantic==1.10.13
-uvicorn==0.17.6
-itsdangerous
-protobuf
+huggingface_hub==0.19.4
+protobuf>=3.20.0,<4.0.0  # 防止版本冲突
+pydantic==1.10.13  # 保持与 fastapi 0.104.1 兼容
+itsdangerous==2.1.2  # 显式声明版本避免安全警告
+
+# pydantic==1.10.13
+# uvicorn==0.17.6
+# itsdangerous
+# protobuf

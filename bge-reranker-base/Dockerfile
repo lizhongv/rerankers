@@ -1,5 +1,5 @@
 # FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
-# # FROM pytorch/pytorch:2.7.0-cuda11.8-cudnn9-runtime
+# #
 
 # # please download the model from https://huggingface.co/BAAI/bge-reranker-base and put it in the same directory as Dockerfile
 # COPY ./bge-reranker-base ./bge-reranker-base
@@ -14,17 +14,15 @@
 # ENTRYPOINT ["python3", "app.py"]
 
 
-FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+# FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+FROM pytorch/pytorch:2.7.0-cuda11.8-cudnn9-runtime
+WORKDIR /bge-reranker-base
 
-# 下载模型
-# RUN apt-get update && apt-get install -y git
-# RUN git clone https://huggingface.co/BAAI/bge-reranker-base ./bge-reranker-base
+COPY ./bge-reranker-base ./bge-reranker-base
 
-WORKDIR /bge—reranker-base
 COPY requirements.txt .
-
-RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-
+# RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install --default-timeout=1000 -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 COPY app.py .
 
 EXPOSE 6006
