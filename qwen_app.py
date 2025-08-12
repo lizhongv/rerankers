@@ -32,7 +32,7 @@ class Singleton(type):
         return cls._instance
 
 class QwenReranker(metaclass=Singleton):
-    def __init__(self, model_name="Qwen/Qwen3-Reranker-0.6B"):
+    def __init__(self, model_name="Qwen3-Reranker-0.6B"):
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, padding_side='left')
         self.model = AutoModelForCausalLM.from_pretrained(model_name).eval()
         # 如需使用flash_attention_2和半精度，取消下面这行注释
@@ -116,3 +116,6 @@ if __name__ == "__main__":
         uvicorn.run(app, host='0.0.0.0', port=6006)
     except Exception as e:
         print(f"API启动失败！\n报错：\n{e}")
+
+
+# uvicorn qwen_app:app --host 0.0.0.0 --port 6006

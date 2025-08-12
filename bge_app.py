@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-@Time: 2023/11/7 22:45
+@Time: 2025/8/12 22:45
 @Author: zhidong
 @File: reranker.py
 @Desc:
@@ -19,7 +19,7 @@ from typing import Optional, List
 
 app = FastAPI()
 security = HTTPBearer()
-env_bearer_token = 'ACCESS_TOKEN'
+env_bearer_token = 'sk-xxxx'
 
 class QADocs(BaseModel):
     query: Optional[str]
@@ -33,14 +33,19 @@ class Singleton(type):
         return cls._instance
 
 
-RERANK_MODEL_PATH = os.path.join(os.path.dirname(__file__), "bge-reranker-large")
+# RERANK_MODEL_PATH = os.path.join(os.path.dirname(__file__), "bge-reranker-base")
+# RERANK_MODEL_PATH = os.path.join(os.path.dirname(__file__), "bge-reranker-large")
+RERANK_MODEL_PATH = os.path.join(os.path.dirname(__file__), "bge-reranker-v2-m3")
+
 
 class ReRanker(metaclass=Singleton):
     def __init__(self, model_path):
-        self.reranker = FlagReranker(model_path, use_fp16=False)
+        # Setting use_fp16 to True speeds up computation with a slight performance degradation
+        self.reranker = FlagReranker(model_path, use_fp16=False)  
 
     def compute_score(self, pairs: List[List[str]]):
         if len(pairs) > 0:
+            # Setting normalize 
             result = self.reranker.compute_score(pairs, normalize=True)
             if isinstance(result, float):
                 result = [result]
@@ -62,27 +67,35 @@ class Chat(object):
         new_docs = []
         for index, score in enumerate(scores):
             new_docs.append({"index": index, "text": query_docs.documents[index], "score": score})
-        results = [{"index": documents["index"], "relevance_score": documents["score"]} for documents in list(sorted(new_docs, key=lambda x: x["score"], reverse=True))]
+        
+        # Generate sorted results with relevance scores
+        results = [
+            {"index": documents["index"], "relevance_score": documents["score"]} 
+            for documents in list(sorted(new_docs, key=lambda x: x["score"], reverse=True))
+            ]
         return results
+
+chat = Chat()
 
 @app.post('/v1/rerank')
 async def handle_post_request(docs: QADocs, credentials: HTTPAuthorizationCredentials = Security(security)):
     token = credentials.credentials
     if env_bearer_token is not None and token != env_bearer_token:
         raise HTTPException(status_code=401, detail="Invalid token")
-    chat = Chat()
     try:
         results = chat.fit_query_answer_rerank(docs)
         return {"results": results}
     except Exception as e:
-        print(f"报错：\n{e}")
-        return {"error": "重排出错"}
+        logging.error(f"Reranking error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
+    # Get the access token from environment variables
     token = os.getenv("ACCESS_TOKEN")
     if token is not None:
         env_bearer_token = token
+
     try:
         uvicorn.run(app, host='0.0.0.0', port=6006)
     except Exception as e:
-        print(f"API启动失败！\n报错：\n{e}")
+        print(f"Failed to launch API!\nError details:\n{e}")
