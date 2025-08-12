@@ -9,6 +9,9 @@ cat ~/.ssh/id_ed25519.pub
 
 # 验证
 ssh -T git@github.com
+
+git config --global user.name "lizhongv"
+git config --global user.email "lizhongv@gmail.com"
 ```
 
 # 下载模型
