@@ -16,6 +16,7 @@ huggingface-cli download BAAI/bge-reranker-large --local-dir ./bge-reranker-larg
 huggingface-cli download Qwen/Qwen3-Reranker-0.6B  --local-dir ./Qwen3-Reranker-0.6B
 ```
 
+
 # AutoDL 
 ```bash
 source /etc/network_turbo
@@ -75,4 +76,22 @@ ssh-keygen -t ed25519 -C "lizhongv@gmail.com"
 cat ~/.ssh/id_ed25519.pub
 
 ssh -T git@github.com
+```
+
+
+```bash
+# 将进程挂起
+ctrl+z 
+
+# 查看当前作业列表
+jobs
+
+# 让挂起的作业在后台继续运行
+bg %8
+
+# 使作业忽略 SIGHUP 信号（终端关闭不终止）
+disown -h %8
+
+# 检查进程是否在运行
+jobs -l
 ```
