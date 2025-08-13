@@ -323,6 +323,61 @@ curl -X POST "http://localhost:8000/rerank" \
 }'
 ```
 
+windows上
+
+```bash
+curl "http://localhost:6006/health"
+curl  "http://localhost:6006/model-info"
+
+curl -Method Post "http://localhost:6006/rerank" `
+  -Header @{ "Content-Type" = "application/json" } `
+  -Body '{
+    "query": "气候变化的影响",
+    "documents": [
+      "全球变暖导致冰川融化",
+      "气候变化影响农作物产量",
+      "极端天气事件增加",
+      "海平面上升威胁沿海城市",
+      "生物多样性减少",
+      "可再生能源发展迅速"
+    ],
+    "batch_size": 4
+  }'
+```
+python程序调用
+
+```python 
+import requests
+import json
+
+# 服务地址
+url = "http://localhost:6006/rerank"
+
+# 请求数据
+payload = {
+    "query": "气候变化的影响",
+    "documents": [
+        "全球变暖导致冰川融化",
+        "气候变化影响农作物产量",
+        "极端天气事件增加",
+        "海平面上升威胁沿海城市",
+        "生物多样性减少",
+        "可再生能源发展迅速"
+    ],
+    "batch_size": 4
+}
+
+# 发送请求
+response = requests.post(
+    url,
+    data=json.dumps(payload),
+    headers={"Content-Type": "application/json"}
+)
+
+# 打印结果
+print(json.dumps(response.json(), ensure_ascii=False, indent=2))
+```
+
 ## 回复格式
 
 ```json
