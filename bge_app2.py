@@ -12,11 +12,11 @@ app = FastAPI(
 # Force CPU usage
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
-# model = CrossEncoder('./bge-reranker-base', device='cpu')
-# MODEL_NAME="bge-reranker-base"
+model = CrossEncoder('./bge-reranker-base', device='cpu')
+MODEL_NAME="bge-reranker-base"
 
-model = CrossEncoder('./bge-reranker-v2-m3', device='cpu')
-MODEL_NAME="bge-reranker-v2-m3"
+# model = CrossEncoder('./bge-reranker-v2-m3', device='cpu')
+# MODEL_NAME="bge-reranker-v2-m3"
 
 # Request/Response models
 class QueryDocumentPair(BaseModel):

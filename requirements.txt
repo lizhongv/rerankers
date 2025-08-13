@@ -1,0 +1,10 @@
+fastapi==0.104.1
+huggingface_hub==0.16.4
+sentence-transformers==2.2.2
+transformers==4.30.0
+# transformers[sentencepiece]
+# FlagEmbedding==1.2.8
+pydantic==1.10.13
+uvicorn==0.17.6
+itsdangerous
+protobuf

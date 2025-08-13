@@ -19,19 +19,17 @@ git config --global user.email "lizhongv@gmail.com"
 # source /etc/network_turbo
 export HF_ENDPOINT=https://hf-mirror.com
 
-pip install huggingface-hub
-
+# pip install huggingface-hub
 # huggingface-cli download BAAI/bge-base-zh --local-dir ./bge-base-zh
-# huggingface-cli download BAAI/bge-reranker-base --local-dir ./bge-reranker-base
 hf download  BAAI/bge-reranker-base --local-dir ./bge-reranker-base
 hf download BAAI/bge-reranker-large --local-dir ./bge-reranker-large
 hf download Qwen/Qwen3-Reranker-0.6B  --local-dir ./Qwen3-Reranker-0.6B
-huggingface-cli download BAAI/bge-reranker-v2-m3 --local-dir ./bge-reranker-v2-m3
+hf download BAAI/bge-reranker-v2-m3 --local-dir ./bge-reranker-v2-m3
 hf download BAAI/bge-reranker-v2-m3 --local-dir ./bge-reranker-v2-m3 --force
-
 
 # pip install modelscope
 modelscope download --model BAAI/bge-reranker-v2-m3  --local_dir ./bge-reranker-v2-m3
+modelscope download --model BAAI/bge-reranker-large  --local_dir ./bge-reranker-large
 ```
 
 
@@ -308,7 +306,7 @@ uvicorn bge_app2:app --host 0.0.0.0 --port 8000
 # curl -X GET "http://localhost:8000/health"
 # curl -X GET "http://localhost:8000/model-info"
 
-curl -X POST "http://localhost:8000/rerank" \
+curl -X POST "http://localhost:6006/rerank" \
 -H "Content-Type: application/json" \
 -d '{
   "query": "气候变化的影响",

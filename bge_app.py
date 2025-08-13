@@ -33,9 +33,9 @@ class Singleton(type):
         return cls._instance
 
 
-# RERANK_MODEL_PATH = os.path.join(os.path.dirname(__file__), "bge-reranker-base")
+RERANK_MODEL_PATH = os.path.join(os.path.dirname(__file__), "bge-reranker-base")
 # RERANK_MODEL_PATH = os.path.join(os.path.dirname(__file__), "bge-reranker-large")
-RERANK_MODEL_PATH = os.path.join(os.path.dirname(__file__), "bge-reranker-v2-m3")
+# RERANK_MODEL_PATH = os.path.join(os.path.dirname(__file__), "bge-reranker-v2-m3")
 
 
 class ReRanker(metaclass=Singleton):
