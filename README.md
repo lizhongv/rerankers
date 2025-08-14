@@ -173,26 +173,26 @@ curl -X POST "http://localhost:6006/v1/rerank" \
 
 ```bash 
 # 1. 构建镜像
-docker build -t rerank-api:v1 .         
+docker build -t rerank-api:v3 .         
 
 # 2. 启动容器
 docker run -d \
-  --name rerank-api \
+  --name rerank-api3 \
   -p 6006:6006 \
   -e ACCESS_TOKEN="sk-xxxx" \
-  rerank-api:v1
+  rerank-api:v3
 
 # 3. 检查容器状态
-docker ps -f name=rerank-api
+docker ps -f name=rerank-api3
 
 
 ### 错误排查
 # 查看端口是否占用
 netstat -tulnp | grep 6006
 # 查看日志
-docker logs -f rerank-api
+docker logs -f rerank-api3
 # 停止容器	
-docker stop rerank-api
+docker stop rerank-api3
 # 重启容器	
 docker restart rerank-api
 # 强制删除容器	
@@ -296,7 +296,7 @@ rm -rf ~/.cache/torch
 pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cpu
 
 
-
+# uvicorn bge_app2:app --host 0.0.0.0 --port 8000
 ```
 ## 运行app
 
@@ -306,7 +306,7 @@ uvicorn bge_app2:app --host 0.0.0.0 --port 8000
 # curl -X GET "http://localhost:8000/health"
 # curl -X GET "http://localhost:8000/model-info"
 
-curl -X POST "http://localhost:6006/rerank" \
+curl -X POST "http://localhost:6006/rerank/m3" \
 -H "Content-Type: application/json" \
 -d '{
   "query": "气候变化的影响",
@@ -318,8 +318,93 @@ curl -X POST "http://localhost:6006/rerank" \
     "生物多样性减少",
     "可再生能源发展迅速"
   ],
-  "batch_size": 4
+  "batch_size": 4,
+  "top_k": 5
 }'
+# batch_size 和 top_k 可选
+```
+large回复生成
+```json
+{
+    "model": "bge-reranker-large",
+    "device": "cpu",
+    "processing_time_seconds": 0.278,
+    "documents_processed": 6,
+    "results": [
+        {
+            "index": 1,
+            "document": "气候变化影响农作物产量",
+            "score": 0.9389419555664062,
+            "rank": 1
+        },
+        {
+            "index": 4,
+            "document": "生物多样性减少",
+            "score": 0.9219799637794495,
+            "rank": 2
+        },
+        {
+            "index": 0,
+            "document": "全球变暖导致冰川融化",
+            "score": 0.7691693902015686,
+            "rank": 3
+        },
+        {
+            "index": 2,
+            "document": "极端天气事件增加",
+            "score": 0.6056162118911743,
+            "rank": 4
+        },
+        {
+            "index": 3,
+            "document": "海平面上升威胁沿海城市",
+            "score": 0.21139144897460938,
+            "rank": 5
+        }
+    ]
+}
+```
+m3回复生成
+```json 
+{
+    "model": "bge-reranker-v2-m3",
+    "device": "cpu",
+    "processing_time_seconds": 0.702,
+    "documents_processed": 6,
+    "query": "气候变化的影响",
+    "results": [
+        {
+            "index": 1,
+            "document": "气候变化影响农作物产量",
+            "score": 0.893294095993042,
+            "rank": 1
+        },
+        {
+            "index": 0,
+            "document": "全球变暖导致冰川融化",
+            "score": 0.4485955238342285,
+            "rank": 2
+        },
+        {
+            "index": 4,
+            "document": "生物多样性减少",
+            "score": 0.2856392562389374,
+            "rank": 3
+        },
+        {
+            "index": 2,
+            "document": "极端天气事件增加",
+            "score": 0.28348684310913086,
+            "rank": 4
+        },
+        {
+            "index": 3,
+            "document": "海平面上升威胁沿海城市",
+            "score": 0.07953723520040512,
+            "rank": 5
+        }
+    ]
+}
 ```
 
 windows上
